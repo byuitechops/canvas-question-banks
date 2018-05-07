@@ -1,0 +1,17 @@
+{
+  "name": "canvas-question-banks",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "form-urlencoded": "^2.0.4",
+    "got": "^8.3.1"
+  }
+}
