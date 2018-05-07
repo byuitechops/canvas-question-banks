@@ -70,6 +70,6 @@ const QuestionBanks = QB({
   - `data` <[QuestionData](https://canvas.instructure.com/doc/api/quiz_questions.html#method.quizzes/quiz_questions.update)> 
 
 
-[QuestionBanks]: "#QuestionBanks"
-[QuestionBank]: "#QuestionBank"
-[Question]: "#Question"
+[QuestionBanks]: #QuestionBanks
+[QuestionBank]: #QuestionBank
+[Question]: #Question
