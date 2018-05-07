@@ -8,7 +8,32 @@ The easiest way to find your cookies is going to any page on canvas, opening the
 
 You can find the value for `canvas_session` and `_csrf_token`
 
-`canvas_session` has the `HTTP only` flag so it won't appear in `document.cookie`. You could probably get it programmatically by [puppeteering](https://github.com/GoogleChrome/puppeteer) into canvas then [catching the pages xhr requests](https://github.com/GoogleChrome/puppeteer/blob/v1.3.0/docs/api.md#class-request) which you could snatch the cookies off of. But I haven't tried it.
+`canvas_session` has the `HTTP only` flag so it won't appear in `document.cookie`. You could get them programmatically by [puppeteering](https://github.com/GoogleChrome/puppeteer) with code such as 
+``` js
+const puppeteer = require('puppeteer')
+const auth = require('./auth.json')
+
+async function getCookies(){
+  const browser = await puppeteer.launch()
+  const page = await browser.newPage()
+  await page.goto("https://byui.instructure.com/login/canvas")
+  await page.type("#pseudonym_session_unique_id",auth.username)
+  await page.type("#pseudonym_session_password",auth.password)
+  await Promise.all([
+    page.waitForNavigation(),
+    page.click('button[type=submit]')
+  ])
+  var cookies = await page.cookies()
+  await browser.close()
+  return {
+    canvas_session: cookies.find(n => n.name == 'canvas_session').value,
+    _csrf_token: cookies.find(n => n.name == '_csrf_token').value,
+  }
+}
+
+getCookies().then(console.log)
+```
+to go to the login page, login, then grab the cookies
 
 ## Getting Started
 
