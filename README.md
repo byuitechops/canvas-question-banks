@@ -36,40 +36,40 @@ const QuestionBanks = QB({
 ## API
 
 ### QuestionBanks
-- **course** <[Number]()>
+- **course** <_Number_>
 - **questionBanks** <[[QuestionBank]]>
 - async **getAll()**
   -  _returns_ <[[QuestionBank]]>
 - async **create**(title)
   -  _returns_ <[QuestionBank]>
-  - `title` <[String]()> The title of the new Question Bank
+  - `title` <_String_> The title of the new Question Bank
 - async **delete**(id)
-  - `id` <[Number]()> The id of the Question Bank to delete
+  - `id` <_Number_> The id of the Question Bank to delete
 
 ### QuestionBank
-- **_course** <[Number]()>
-- **_id** <[Number]()>
+- **_course** <_Number_>
+- **_id** <_Number_>
 - **_questions** <[[Question]]>
 - async **update**(title)
   - _returns_ <[QuestionBank]>
-  - `title` <[String]()> The updated title
+  - `title` <_String_> The updated title
 - async **getQuestions**()
   - _returns_ <[[Question]]>
 - async **createQuestion**(data)
   - _returns_ <[Question]>
   - `data` <[QuestionData](https://canvas.instructure.com/doc/api/quiz_questions.html#method.quizzes/quiz_questions.create)> Follow normal canvas documentation for data
 - async **deleteQuestion**(id)
-  - `id` <[Number]()> The id of the Question to delete
+  - `id` <_Number_> The id of the Question to delete
 
 ### Question
-- **_course** <[Number]()>
-- **_bank** <[Number]()>
-- **_id** <[Number]()>
+- **_course** <_Number_>
+- **_bank** <_Number_>
+- **_id** <_Number_>
 - async **update**(data)
   - _returns_ <[Question]>
   - `data` <[QuestionData](https://canvas.instructure.com/doc/api/quiz_questions.html#method.quizzes/quiz_questions.update)> 
 
 
-[QuestionBanks]: #QuestionBanks
-[QuestionBank]: #QuestionBank
-[Question]: #Question
+[QuestionBanks]: #questionbanks
+[QuestionBank]: #questionbank
+[Question]: #question
