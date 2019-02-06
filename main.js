@@ -1,7 +1,9 @@
 var got = require('got')
 var encode = require('form-urlencoded')
 var cheerio = require('cheerio')
-var Cookies = null
+var browser = require('../puppeteer-canvas-login/puppeteerLogin.js');
+var Input = null
+var page
 
 async function send(url,method="GET",data) {
   data && (data.authenticity_token = Cookies.token)
@@ -22,6 +24,10 @@ class QuestionBanks{
     this.questionBanks
   }
   async getAll(){
+    page = await browser.login(Input);
+    await page.goto(`https://byui.instructure.com/courses/${this.course}/question_banks`, {
+      waitUntil: ['load', 'domcontentloaded']});
+
     var res = await send(`https://byui.instructure.com/courses/${this.course}/question_banks`,"GET")
     var $ = cheerio.load(res.body)
     if(res.statusCode != 200){
@@ -183,13 +189,13 @@ class Question{
   }
 }
 
-module.exports = function(cookies){
-  if(!cookies.canvas_session || !cookies._csrf_token){
-    throw new Error("Missing the canvas_session or _csrf_token cookie")
+module.exports = function(inputs){
+  if(!inputs.userName || !inputs.passWord){
+    throw new Error("Missing login credentials")
   }
-  Cookies = {
-    session:cookies.canvas_session,
-    token:decodeURIComponent(cookies._csrf_token)
+  Inputs = {
+    userName:inputs.userName,
+    passWord:inputs.passWord
   }
   return QuestionBanks
 }
