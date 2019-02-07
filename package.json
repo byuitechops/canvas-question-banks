@@ -13,7 +13,7 @@
     "cheerio": "^1.0.0-rc.2",
     "form-urlencoded": "^2.0.9",
     "got": "^8.3.2",
-    "puppeteer-canavas-login": "git+https://github.com/byuitechops/puppeteer-canavas-login.git",
+    "puppeteer-canvas-login": "git+https://github.com/byuitechops/puppeteer-canvas-login.git",
     "save": "^2.3.3"
   }
 }
