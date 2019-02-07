@@ -1,7 +1,7 @@
 var got = require('got')
 var encode = require('form-urlencoded')
 var cheerio = require('cheerio')
-var browser = require('../puppeteer-canvas-login/puppeteerLogin.js');
+var browser = require('puppeteer-canavas-login');
 var Input = null
 var page
 
