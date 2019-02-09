@@ -1,10 +1,10 @@
 async function getQ(qId, bankId, courseId, token) {
-    var data = {}
-      , p = {
-        "assessment_question[assessment_question_bank_id]": bankId,
-        _method: "PUT",
-        authenticity_token: token
-    };
+    var data = {},
+        p = {
+            "assessment_question[assessment_question_bank_id]": bankId,
+            _method: "PUT",
+            authenticity_token: token
+        };
 
     function makeRequest(url, method, data) {
         function objToFormString(obj) {
@@ -17,7 +17,7 @@ async function getQ(qId, bankId, courseId, token) {
             return search.toString();
         }
         var httpRequest = new XMLHttpRequest();
-        httpRequest.onreadystatechange = function() {
+        httpRequest.onreadystatechange = function () {
             if (httpRequest.readyState === XMLHttpRequest.DONE) {
                 if (httpRequest.status === 200) {
                     console.log(httpRequest.responseText);
@@ -28,10 +28,10 @@ async function getQ(qId, bankId, courseId, token) {
         };
 
         httpRequest.open(method, url);
-        
+
         httpRequest.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
 
-        
+
 
         httpRequest.send(objToFormString(data));
     }
@@ -39,4 +39,10 @@ async function getQ(qId, bankId, courseId, token) {
     makeRequest(`https://byui.instructure.com/courses/${courseId}/question_banks/${bankId}/assessment_questions/${qId}`, 'POST', p)
 }
 
-getQ(763967, 80338, 80, $.cookie('_csrf_token'));
+module.exports = function (qId, bankId, courseId, token) {
+    getQ(763967, 80338, 80, $.cookie('_csrf_token'));
+}
+
+/* qId = 763967
+   bankId = 80338
+   courseId = 80 */

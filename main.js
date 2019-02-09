@@ -1,9 +1,10 @@
-var got = require('got')
-var encode = require('form-urlencoded')
-var cheerio = require('cheerio')
+var got = require('got');
+var encode = require('form-urlencoded');
+var cheerio = require('cheerio');
 var browser = require('puppeteer-canvas-login');
-var Input = null
-var page
+var getQ = require('./josh\'sTempCode.js');
+var Input = null;
+var page;
 
 async function send(url, method = "GET", data) {
   data && (data.authenticity_token = Cookies.token)
@@ -23,20 +24,18 @@ class QuestionBanks {
     this.course = course
     this.questionBanks
   }
-  async getAll() {
-    page = await browser.login(Input);
-    await page.goto(`https://byui.instructure.com/courses/${this.course}/question_banks`, {
-      waitUntil: ['load', 'domcontentloaded']
-    });
 
-    var res = await send(`https://byui.instructure.com/courses/${this.course}/question_banks`, "GET")
-    var $ = cheerio.load(res.body)
-    if (res.statusCode != 200) {
-      var err = new Error("Couldn't get Question Banks")
-      err.statusCode = res.statusCode
-      err.url = res.url
-      throw err
-    }
+  // to be run with Puppeteer
+  async getAll() {
+    //page = await browser.login(Input);
+    // var res = await send(`https://byui.instructure.com/courses/${this.course}/question_banks`, "GET")
+    // var $ = cheerio.load(res.body)
+    // if (res.statusCode != 200) {
+    //   var err = new Error("Couldn't get Question Banks")
+    //   err.statusCode = res.statusCode
+    //   err.url = res.url
+    //   throw err
+    // }
     this.questionBanks = $(".question_bank a.title:not(:contains('No Name'))").map((i, a) => {
       var $a = $(a)
       var qb = new QuestionBank(this.course, $a.attr('href').match(/\d+$/)[0])
@@ -60,7 +59,7 @@ class QuestionBanks {
       err.url = res.url
       throw err
     }
-    await this.getAll()
+    await this.getAll() // Called in puppeteer
     return this.questionBanks.find(n => n.title == title)
   }
   async delete(id) {
@@ -107,6 +106,8 @@ class QuestionBank {
     this.setdata(JSON.parse(res.body).assessment_question_bank)
     return this
   }
+
+  // To be run through Puppeteer
   async getQuestions() {
     var res = await send(`https://byui.instructure.com/courses/${this._course}/question_banks/${this._id}`, "GET")
     var $ = cheerio.load(res.body)
@@ -198,5 +199,8 @@ module.exports = function (inputs) {
     userName: inputs.userName,
     passWord: inputs.passWord
   }
+
+  // PUPPETEER LOGIN
+
   return QuestionBanks
 }
