@@ -13,10 +13,16 @@ async function main() {
         // console.log(questionBanks);
         // console.log(questionBanks.length);
 
-        var questionIds = questionBanks.map(async qBank => {
-            var qIds = await pupLogin.getQuestions(course, qBank.id);
-            return qIds;
-        });
+        // var questionIds = questionBanks.map(async qBank => {
+        //     var qIds = await pupLogin.getQuestions(course, qBank.id);
+        //     return qIds;
+        // });
+
+        var questionIds = [];
+        for (const qBank of questionBanks) {
+            questionIds.push(await pupLogin.getQuestions(course, qBank.id));
+        }
+
         console.log(questionIds);
         console.log(questionIds.length);
     } catch (error) {
