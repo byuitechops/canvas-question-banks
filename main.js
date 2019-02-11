@@ -36,16 +36,16 @@ class QuestionBanks {
     //   err.url = res.url
     //   throw err
     // }
-    this.questionBanks = $(".question_bank a.title:not(:contains('No Name'))").map((i, a) => {
-      var $a = $(a)
-      var qb = new QuestionBank(this.course, $a.attr('href').match(/\d+$/)[0])
-      qb.setdata({
-        title: $a.html().trim(),
-        id: $a.attr('href').match(/\d+$/)[0]
-      })
-      return qb
-    }).get()
-    return this.questionBanks
+    //   this.questionBanks = $(".question_bank a.title:not(:contains('No Name'))").map((i, a) => {
+    //     var $a = $(a)
+    //     var qb = new QuestionBank(this.course, $a.attr('href').match(/\d+$/)[0])
+    //     qb.setdata({
+    //       title: $a.html().trim(),
+    //       id: $a.attr('href').match(/\d+$/)[0]
+    //     })
+    //     return qb
+    //   }).get()
+    //   return this.questionBanks
   }
   async create(title) {
     var res = await send(`https://byui.instructure.com/courses/${this.course}/question_banks`, "POST", {

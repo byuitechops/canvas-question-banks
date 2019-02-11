@@ -1,16 +1,24 @@
 var pupLogin = require('./puppeteerLogin.js');
+const course = '46992';
 
 async function main() {
     inputs = {
         userName: process.env.USERNAMENODE,
         passWord: process.env.PASSWORD
     }
-    console.log(inputs);
 
     try {
         await pupLogin.login(inputs);
-        var qBanks = await pupLogin.getQuestionBanks();
-        console.log(qBanks);
+        var questionBanks = await pupLogin.getQuestionBanks(course);
+        // console.log(questionBanks);
+        // console.log(questionBanks.length);
+
+        var questionIds = questionBanks.map(async qBank => {
+            var qIds = await pupLogin.getQuestions(course, qBank.id);
+            return qIds;
+        });
+        console.log(questionIds);
+        console.log(questionIds.length);
     } catch (error) {
         console.log(error);
     }
