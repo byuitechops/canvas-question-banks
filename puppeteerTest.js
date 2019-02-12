@@ -1,5 +1,6 @@
 var pupLogin = require('./puppeteerLogin.js');
-const course = '46992';
+// const courseId = '46992';
+const courseId = '80';
 
 async function main() {
     inputs = {
@@ -9,25 +10,32 @@ async function main() {
 
     try {
         await pupLogin.login(inputs);
-        var questionBanks = await pupLogin.getQuestionBanks(course);
-        // console.log(questionBanks);
-        // console.log(questionBanks.length);
+        var questionBanks = await pupLogin.getQuestionBanks(courseId);
+        console.log(questionBanks);
+        console.log(questionBanks.length);
 
-        // var questionIds = questionBanks.map(async qBank => {
-        //     var qIds = await pupLogin.getQuestions(course, qBank.id);
-        //     return qIds;
-        // });
 
-        var questionIds = [];
-        for (const qBank of questionBanks) {
-            questionIds.push(await pupLogin.getQuestions(course, qBank.id));
-        }
 
-        console.log(questionIds);
-        console.log(questionIds.length);
-    } catch (error) {
-        console.log(error);
-    }
+
+        var qs = await pupLogin.getQuestions(courseId, questionBanks[0].id);
+        console.log(qs);
+
+    // console.log(questionIds);
+    // console.log(questionIds.length);
+    // var courseId = "80";
+    // var response = await pupLogin.httpGet(`https://byui.instructure.com/courses/${courseId}/question_banks/`);
+    // // console.log(JSON.parse(response));
+
+    // var courseId = "80";
+    // var bankId = "80338";
+    // var response2 = await pupLogin.httpGet(`https://byui.instructure.com/courses/${courseId}/question_banks/${bankId}/questions`);
+    // console.dir(JSON.parse(response2), {depth:null});
+
+} catch (error) {
+    console.log("error");
+    console.log(error);
+}
+pupLogin.logout();
 }
 
 main();
