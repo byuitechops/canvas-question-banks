@@ -1,10 +1,10 @@
 var got = require('got');
 var encode = require('form-urlencoded');
-var cheerio = require('cheerio');
-var browser = require('puppeteer-canvas-login');
-var getQ = require('./josh\'sTempCode.js');
-var Input = null;
-var page;
+var getData = require('./puppeteerLogin.js');
+
+async function logout() {
+  await getData.logout();
+}
 
 async function send(url, method = "GET", data) {
   data && (data.authenticity_token = Cookies.token)
@@ -23,29 +23,29 @@ class QuestionBanks {
   constructor(course) {
     this.course = course
     this.questionBanks
+    this.page = null
+  }
+
+  async killPage() {
+    // await getData.killPage();
+  }
+
+  async assertPage() {
+    if (this.page === null) {
+      this.page = await getData.newPage();
+    }
   }
 
   // to be run with Puppeteer
   async getAll() {
-    //page = await browser.login(Input);
-    // var res = await send(`https://byui.instructure.com/courses/${this.course}/question_banks`, "GET")
-    // var $ = cheerio.load(res.body)
-    // if (res.statusCode != 200) {
-    //   var err = new Error("Couldn't get Question Banks")
-    //   err.statusCode = res.statusCode
-    //   err.url = res.url
-    //   throw err
-    // }
-    //   this.questionBanks = $(".question_bank a.title:not(:contains('No Name'))").map((i, a) => {
-    //     var $a = $(a)
-    //     var qb = new QuestionBank(this.course, $a.attr('href').match(/\d+$/)[0])
-    //     qb.setdata({
-    //       title: $a.html().trim(),
-    //       id: $a.attr('href').match(/\d+$/)[0]
-    //     })
-    //     return qb
-    //   }).get()
-    //   return this.questionBanks
+    await this.assertPage();
+    var tmpBanks = await getData.getQuestionBanks(this.page, this.course);
+    this.questionBanks = tmpBanks.map(bank => {
+      var qb = new QuestionBank(this.page, this.course, bank.id);
+      qb.setdata(bank);
+      return qb;
+    })
+    return this.questionBanks;
   }
   async create(title) {
     var res = await send(`https://byui.instructure.com/courses/${this.course}/question_banks`, "POST", {
@@ -82,13 +82,15 @@ class QuestionBanks {
 }
 
 class QuestionBank {
-  constructor(course, id) {
+  constructor(page, course, id) {
     this._course = course
     this._id = id
     this._questions = []
+    this.page = page
   }
   setdata(data) {
     Object.assign(this, data)
+
   }
   async update(title) {
     var res = await send(`https://byui.instructure.com/courses/${this._course}/question_banks/${this._id}`, "POST", {
@@ -107,24 +109,17 @@ class QuestionBank {
     return this
   }
 
-  // To be run through Puppeteer
   async getQuestions() {
-    var res = await send(`https://byui.instructure.com/courses/${this._course}/question_banks/${this._id}`, "GET")
-    var $ = cheerio.load(res.body)
-    if (res.statusCode != 200) {
-      var err = new Error("Couldn't get Question Banks")
-      err.statusCode = res.statusCode
-      err.url = res.url
-      throw err
-    }
-    var questionIds = $('#questions .assessment_question_id').get().map(n => $(n).text())
-    this._questions = await Promise.all(questionIds.map(async id => {
-      var question = new Question(this._course, this._id, id)
-      await question.update({})
-      return question
-    }))
-    return this._questions
+    var questions = await getData.getQuestions(this.page, this._course, this._id);
+    this._questions = questions.map(question => {
+      var questionOut = new Question(this.page, this._course, this._id, question.id);
+      questionOut.setdata(question);
+      return questionOut;
+    });
+
+    return this._questions;
   }
+
   async createQuestion(data) {
     var res = await send(`https://byui.instructure.com/courses/${this._course}/question_banks/${this._id}/assessment_questions`, "POST", {
       question: data,
@@ -164,10 +159,11 @@ class QuestionBank {
 }
 
 class Question {
-  constructor(course, bank, id) {
+  constructor(page, course, bank, id) {
     this._course = course
     this._bank = bank
     this._id = id
+    this.page = page
   }
   setdata(data) {
     Object.assign(this, data)
@@ -191,16 +187,16 @@ class Question {
   }
 }
 
-module.exports = function (inputs) {
+module.exports = async function (inputs) {
   if (!inputs.userName || !inputs.passWord) {
     throw new Error("Missing login credentials")
   }
-  Inputs = {
-    userName: inputs.userName,
-    passWord: inputs.passWord
-  }
 
   // PUPPETEER LOGIN
+  await getData.login(inputs);
 
-  return QuestionBanks
+  return {
+    QuestionBanks: QuestionBanks,
+    logout: logout
+  }
 }

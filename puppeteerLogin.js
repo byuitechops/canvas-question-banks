@@ -1,15 +1,20 @@
 var browser = require('puppeteer-canvas-login');
-var page;
+var isLoggedIn = false;
 
 async function login(input) {
-    page = await browser.login(input);
+    await browser.login(input);
+    isLoggedIn = true;
 }
 
-
+async function newPage() {
+    var page = await browser.newPage();
+    await page.goto('https://byui.instructure.com/');
+    return page;
+}
 
 function makeRequest(url, method = "GET", data) {
-    
-    
+
+
     function objToFormString(obj) {
         if (obj === undefined) {
             return undefined;
@@ -31,45 +36,41 @@ function makeRequest(url, method = "GET", data) {
                 }
             }
         };
-        
+
         httpRequest.open(method, url);
-        
+
         httpRequest.setRequestHeader("Accept", "application/json; charset=UTF-8");
-        if(data !== undefined){
-            
+        if (data !== undefined) {
+
             httpRequest.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
 
-            data.authenticity_token = decodeURIComponent(data.authenticity_token);    
+            data.authenticity_token = decodeURIComponent(data.authenticity_token);
             data = objToFormString(data);
-            
-            debugger;
+
             httpRequest.send(data);
-        } else{
+        } else {
             httpRequest.send();
         }
     });
 }
 
-async function httpGet(url) {
-    //josh'sTempCode.js
-
+async function httpGet(page, url) {
     const result = await page.evaluate(makeRequest, url).then(JSON.parse);
     return result;
 }
 
-async function httpPost(url, data){
+async function httpPost(page, url, data) {
     var cookies = await page.cookies();
-    
+
     data.authenticity_token = cookies.filter(cookie => cookie.name === "_csrf_token")[0].value;
     const result = await page.evaluate(makeRequest, url, "POST", data).then(JSON.parse);
     return result;
 }
 
-async function getQuestionBanks(courseId) {
+async function getQuestionBanks(page, courseId) {
     // make the call to get the banks
     try {
-
-        var questionBanks = await httpGet(`https://byui.instructure.com/courses/${courseId}/question_banks/`);
+        var questionBanks = await httpGet(page, `https://byui.instructure.com/courses/${courseId}/question_banks/`);
 
         questionBanks = questionBanks.map(bank => {
             return {
@@ -85,32 +86,35 @@ async function getQuestionBanks(courseId) {
     return questionBanks;
 }
 
-async function getQuestions(courseId, bankId) {
+async function getQuestions(page, courseId, bankId) {
 
 
     // make the call to get the banks
     try {
         var questions = [];
+        var questionsOut = [];
         var pageCount = 0;
         var questionsAPI;
         do {
             pageCount += 1;
-            questionsAPI = await httpGet(`https://byui.instructure.com/courses/${courseId}/question_banks/${bankId}/questions/?page=${pageCount}`);
+            questionsAPI = await httpGet(page, `https://byui.instructure.com/courses/${courseId}/question_banks/${bankId}/questions/?page=${pageCount}`);
             questions = questions.concat(questionsAPI.questions);
         } while (pageCount !== questionsAPI.pages)
-        
+
         // just want the ids
-        questionIds= questions.map(question => question.assessment_question.id);
+        questionIds = questions.map(question => question.assessment_question.id);
 
         for (const questionId of questionIds) {
             let postObj = {
                 "assessment_question[assessment_question_bank_id]": bankId,
                 _method: "PUT"
             }
-            question = await httpPost(`https://byui.instructure.com/courses/${courseId}/question_banks/${bankId}/assessment_questions/${questionId}`,  postObj);
+            question = await httpPost(page, `https://byui.instructure.com/courses/${courseId}/question_banks/${bankId}/assessment_questions/${questionId}`, postObj);
+            questionsOut.push(question);
         }
-        
-        return questions;
+
+        return questionsOut;
+        //return questionIds;
 
     } catch (error) {
         error.message = `Get question bank list from course ${courseId} ERROR:\n${error.message}`
@@ -124,6 +128,7 @@ async function getQuestions(courseId, bankId) {
 
 module.exports = {
     login: login,
+    newPage: newPage,
     logout: browser.logout,
     getQuestionBanks: getQuestionBanks,
     getQuestions: getQuestions,
