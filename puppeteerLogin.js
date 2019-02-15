@@ -1,24 +1,25 @@
 var browser = require('puppeteer-canvas-login');
 var isLoggedIn = false;
 
+// login with puppeteer
 async function login(input) {
     await browser.login(input);
     isLoggedIn = true;
 }
 
+// create a new page instance, generally one page per course
 async function newPage() {
     var page = await browser.newPage();
     await page.goto('https://byui.instructure.com/');
     return page;
 }
 
+// kill the given page
 async function closePage(page) {
     await browser.closePage(page);
 }
 
 function makeRequest(url, method = "GET", data) {
-
-
     function objToFormString(obj) {
         if (obj === undefined) {
             return undefined;
@@ -71,6 +72,7 @@ async function httpPost(page, url, data) {
     return result;
 }
 
+// get all banks from the given course
 async function getQuestionBanks(page, courseId) {
     // make the call to get the banks
     try {
@@ -90,9 +92,8 @@ async function getQuestionBanks(page, courseId) {
     return questionBanks;
 }
 
+// get all questions from the given bank
 async function getQuestions(page, courseId, bankId) {
-
-
     // make the call to get the banks
     try {
         var questions = [];

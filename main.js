@@ -2,6 +2,7 @@ var got = require('got');
 var encode = require('form-urlencoded');
 var getData = require('./puppeteerLogin.js');
 
+// calls the puppeteer browser.close(). Kills all open pages and ends puppeteer session
 async function logout() {
   await getData.logout();
 }
@@ -26,17 +27,20 @@ class QuestionBanks {
     this.page = null
   }
 
-  async killPage() {
-    // await getData.killPage();
+  // calls the puppeteer page.close() on the page for this QuestionBanks instance
+  async closePage() {
+    await getData.closePage(this.page);
   }
 
+  // asserts a newPage exists, else opens a newPage instance
   async assertPage() {
     if (this.page === null) {
       this.page = await getData.newPage();
     }
   }
 
-  // to be run with Puppeteer
+  // gets all question banks for a given course
+  // returns an object containing an array of question banks
   async getAll() {
     await this.assertPage();
     var tmpBanks = await getData.getQuestionBanks(this.page, this.course);
@@ -47,6 +51,8 @@ class QuestionBanks {
     })
     return this.questionBanks;
   }
+
+  // other available methods for QuestionBanks class
   async create(title) {
     var res = await send(`https://byui.instructure.com/courses/${this.course}/question_banks`, "POST", {
       assessment_question_bank: {
@@ -59,7 +65,7 @@ class QuestionBanks {
       err.url = res.url
       throw err
     }
-    await this.getAll() // Called in puppeteer
+    await this.getAll()
     return this.questionBanks.find(n => n.title == title)
   }
   async delete(id) {
@@ -90,7 +96,6 @@ class QuestionBank {
   }
   setdata(data) {
     Object.assign(this, data)
-
   }
   async update(title) {
     var res = await send(`https://byui.instructure.com/courses/${this._course}/question_banks/${this._id}`, "POST", {
@@ -109,6 +114,8 @@ class QuestionBank {
     return this
   }
 
+  // gets all questions in the current question bank from puppeteer
+  // returns an array of question objects
   async getQuestions() {
     var questions = await getData.getQuestions(this.page, this._course, this._id);
     this._questions = questions.map(question => {
