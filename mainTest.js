@@ -1,7 +1,7 @@
 var QuestionBankTools = require('./main.js');
 
 async function main() {
-    const course = '37054';
+    const course = '35934';
     inputs = {
         userName: process.env.USERNAMENODE,
         passWord: process.env.PASSWORD
@@ -16,6 +16,8 @@ async function main() {
     console.dir(qbs, {
         depth: 3
     });
+    await qbs.closePage();
+
     await QuestionBanksKeys.logout();
 }
 

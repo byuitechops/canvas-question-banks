@@ -12,6 +12,10 @@ async function newPage() {
     return page;
 }
 
+async function closePage(page) {
+    await browser.closePage(page);
+}
+
 function makeRequest(url, method = "GET", data) {
 
 
@@ -129,6 +133,7 @@ async function getQuestions(page, courseId, bankId) {
 module.exports = {
     login: login,
     newPage: newPage,
+    closePage: closePage,
     logout: browser.logout,
     getQuestionBanks: getQuestionBanks,
     getQuestions: getQuestions,
