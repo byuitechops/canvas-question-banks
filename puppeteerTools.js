@@ -1,4 +1,5 @@
 var browser = require('puppeteer-canvas-login');
+var mapToCanvasQuestion = require('./mapToCanvasQuestionObj.js')
 var isLoggedIn = false;
 
 // login with puppeteer
@@ -106,21 +107,22 @@ async function getQuestions(page, courseId, bankId) {
             questions = questions.concat(questionsAPI.questions);
         } while (pageCount !== questionsAPI.pages)
 
-        // just want the ids
-        questionIds = questions.map(question => question.assessment_question.id);
+        // // just want the ids
+        // questionIds = questions.map(question => question.assessment_question.id);
 
-        for (const questionId of questionIds) {
-            let postObj = {
-                "assessment_question[assessment_question_bank_id]": bankId,
-                _method: "PUT"
-            }
-            question = await httpPost(page, `https://byui.instructure.com/courses/${courseId}/question_banks/${bankId}/assessment_questions/${questionId}`, postObj);
-            questionsOut.push(question);
-        }
+        // for (const questionId of questionIds) {
+        //     let postObj = {
+        //         "assessment_question[assessment_question_bank_id]": bankId,
+        //         _method: "PUT"
+        //     }
+        //     question = await httpPost(page, `https://byui.instructure.com/courses/${courseId}/question_banks/${bankId}/assessment_questions/${questionId}`, postObj);
+        //     questionsOut.push(question);
+        // }
+
+        // map questions[] to canvasQuestionObj
+        questionsOut = mapToCanvasQuestion(questions);
 
         return questionsOut;
-        //return questionIds;
-
     } catch (error) {
         error.message = `Get question bank list from course ${courseId} ERROR:\n${error.message}`
         throw error;

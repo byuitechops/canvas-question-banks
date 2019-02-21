@@ -1,6 +1,6 @@
 var got = require('got');
 var encode = require('form-urlencoded');
-var getData = require('./puppeteerLogin.js');
+var getData = require('./puppeteerTools.js');
 
 // calls the puppeteer browser.close(). Kills all open pages and ends puppeteer session
 async function logout() {
@@ -119,7 +119,7 @@ class QuestionBank {
   async getQuestions() {
     var questions = await getData.getQuestions(this.page, this._course, this._id);
     this._questions = questions.map(question => {
-      var questionOut = new Question(this.page, this._course, this._id, question.id);
+      var questionOut = new Question(this._course, this._id, question.id);
       questionOut.setdata(question);
       return questionOut;
     });
@@ -166,11 +166,11 @@ class QuestionBank {
 }
 
 class Question {
-  constructor(page, course, bank, id) {
+  constructor(course, bank, id) {
     this._course = course
     this._bank = bank
     this._id = id
-    this.page = page
+    // this.page = page
   }
   setdata(data) {
     Object.assign(this, data)

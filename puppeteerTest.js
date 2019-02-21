@@ -1,4 +1,4 @@
-var getData = require('./puppeteerLogin.js');
+var getData = require('./puppeteerTools.js');
 // const courseId = '46992';
 const courseId = '80';
 
