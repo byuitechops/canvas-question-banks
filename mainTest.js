@@ -18,7 +18,7 @@ async function main() {
         return bank.id === 497767;
     });
     console.dir(currentBank['_questions'], {
-        depth: 6
+        depth: 4
     });
     await qbs.closePage(); // kill current page
 

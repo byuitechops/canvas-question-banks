@@ -119,6 +119,10 @@ async function getQuestions(page, courseId, bankId) {
         //     questionsOut.push(question);
         // }
 
+        // console.dir(questions, {
+        //     depth: 6
+        // });
+
         // map questions[] to canvasQuestionObj
         questionsOut = mapToCanvasQuestion(questions);
 
