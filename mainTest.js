@@ -3,8 +3,8 @@ var QuestionBankTools = require('./main.js');
 async function main() {
     const course = '35934';
     inputs = {
-        username: process.env.USERNAMENODE,
-        password: process.env.PASSWORD
+        userName: process.env.USERNAMENODE,
+        passWord: process.env.PASSWORD
     }
 
     var QuestionBanksKeys = await QuestionBankTools(inputs); // login with puppeteer
