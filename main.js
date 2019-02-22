@@ -195,7 +195,7 @@ class Question {
 }
 
 module.exports = async function (inputs) {
-  if (!inputs.userName || !inputs.passWord) {
+  if (!inputs.username || !inputs.password) {
     throw new Error("Missing login credentials")
   }
 
