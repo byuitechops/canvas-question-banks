@@ -60,11 +60,20 @@ const QuestionBanks = QB({
 
 ## API
 
+- async **logout()**
+- async **send**(url, method, data)
+  - `url` <_String_> The URL to GET from
+  - `method` <_String_> The send method, default = "GET"
+  - `data` <[QuestionBank]>
+
 ### QuestionBanks
 - **course** <_Number_>
 - **questionBanks** <[[QuestionBank]]>
+- **page** <_Page_>
+- async **closePage()**
+- async **assertPage()**
 - async **getAll()**
-  -  _returns_ <[[QuestionBank]]>
+  -  _returns_ <[[QuestionBanks]]>
 - async **create**(title)
   -  _returns_ <[QuestionBank]>
   - `title` <_String_> The title of the new Question Bank
@@ -75,6 +84,7 @@ const QuestionBanks = QB({
 - **_course** <_Number_>
 - **_id** <_Number_>
 - **_questions** <[[Question]]>
+- **page** <_Page_>
 - async **update**(title)
   - _returns_ <[QuestionBank]>
   - `title` <_String_> The updated title
@@ -90,6 +100,7 @@ const QuestionBanks = QB({
 - **_course** <_Number_>
 - **_bank** <_Number_>
 - **_id** <_Number_>
+- **page** <_Page_>
 - async **update**(data)
   - _returns_ <[Question]>
   - `data` <[QuestionData](https://canvas.instructure.com/doc/api/quiz_questions.html#method.quizzes/quiz_questions.update)> 
