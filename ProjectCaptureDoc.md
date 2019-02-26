@@ -1,5 +1,5 @@
-# Project Capture Document for (Title of Project)
-#### *Author: Your_Name_Here*
+# Project Capture Document for Canvas Question Banks
+#### *Author: Seth Bolander*
 
 ## Background
 Paragraph describing context of the needs of the stakeholder. It should focus on the **why** of the project.
@@ -7,7 +7,8 @@ Paragraph describing context of the needs of the stakeholder. It should focus on
 -----
 
 ## Objectives
-Bullet list sentences of **what** the tool should accomplish for them.
+- Return every question in all question banks for a desired course
+- Function quickly and effectively for use in other tools that need questions/banks
 
 -----
 
@@ -17,12 +18,26 @@ Bullet list sentences of **what** the tool should accomplish for them.
 
 #### Source of Inputs
 
-Paragraph of how to get inputs. From who? From where: Slack, email, server...? This also includes user selected options at runtime. How will we know what options to select? For example, in conversion tool, you'd follow the values on the Trello Board. It would also include the steps to get access to the information you need, such as getting added to a Trello Board, or access to a server.
+All inputs are gathered at runtime and should not require any permissions or other sources than the user
 
 #### Definition of Inputs
 
-List here a type definition for each input. For example, if it is a CSV define the column names. If it is a JSON, give an example of the JSON structure. If it is user input, what will the user be asked for? 
-
+- **Login Object**: *inputs*, as the main.js file calls it, requires the login object uses the correct casing (shown below).
+```javascript
+var inputs = {
+    userName: process.env.USERNAMENODE,
+    passWord: process.env.PASSWORD
+}
+```
+For privacy, environment variables (shown above) can be used. To set these in PowerShell use:
+```
+$env:USERNAMENODE="_your_admin_username_"
+$env:PASSWORD="_your_password_"
+```
+- **Course Number**: The course code for the desired banks. Must be of type **string**: 
+```javascript
+const course = '46246';
+```
 ---
 
 ### Output Requirements
