@@ -1,7 +1,7 @@
 var QuestionBankTools = require('./main.js');
 
 async function main() {
-    const course = '80';
+    const course = '46246';
     inputs = {
         userName: process.env.USERNAMENODE,
         passWord: process.env.PASSWORD
@@ -14,10 +14,10 @@ async function main() {
         await bank.getQuestions(); // get questions for every Question Bank
     }
 
-    // var currentBank = qbs.questionBanks.find(bank => {
-    //     return bank.id === 497767;
-    // });
-    console.dir(qbs.questionBanks, {
+    var currentBank = qbs.questionBanks.find(bank => {
+        return bank.id === 497767;
+    });
+    console.dir(currentBank, {
         depth: 4
     });
     await qbs.closePage(); // kill current page
