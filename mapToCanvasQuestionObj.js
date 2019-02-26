@@ -37,19 +37,19 @@ var qKeys = [{
 // list of all keys on the canvas answer object
 // keyToFind: 
 var aKeys = [{
-    keyToFind: "answer_text",
+    keyToFind: /* "answer_text" */'text',
     getValue: (obj, scopedData) => obj.text
 }, {
-    keyToFind: "answer_weight",
+    keyToFind: /* "answer_weight" */'weight',
     getValue: (obj, scopedData) => obj.weight
 }, {
-    keyToFind: "answer_comments",
+    keyToFind: /* "answer_comments" */'comments',
     getValue: (obj, scopedData) => obj.comments || obj.comments_html
 }, {
-    keyToFind: "answer_match_left",
+    keyToFind: /* "answer_match_left" */'left',
     getValue: (obj, scopedData) => obj.left
 }, {
-    keyToFind: "answer_match_right",
+    keyToFind: /* "answer_match_right" */'right',
     getValue: (obj, scopedData) => obj.right
 }, {
     keyToFind: "approximate",
