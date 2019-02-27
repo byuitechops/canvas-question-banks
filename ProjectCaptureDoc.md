@@ -19,15 +19,26 @@ Paragraph describing context of the needs of the stakeholder. It should focus on
 
 #### Source of Inputs
 
-All inputs are gathered at runtime and should not require any permissions or other sources than the user
+All inputs are gathered at runtime and should not require any permissions or other sources than the user.
 
 #### Definition of Inputs
 
-- **Login Object** <_Object_>: *inputs*, as the main.js file calls it, requires the login object uses the correct casing (shown below).
+- **Login Object** <_Object_>: *inputs*, as the main.js file calls it, requires the login object uses the correct casing (shown below). *subdomain* and *launchOptions* are optional.
 ```javascript
 var inputs = {
     userName: process.env.USERNAMENODE,
-    passWord: process.env.PASSWORD
+    passWord: process.env.PASSWORD,
+    subdomain: 'byui.instructure.com' || 'byui.beta.instructure.com' || 'byui.test.instructure.com',
+    // launchOptions object follows puppeteer.launch(options) options
+    launchOptions: {
+        defaultViewport: {
+                width: 1900,
+                height: 1080
+            },
+            args: ['--start-maximized'],
+            headless: false,
+            devtools: false
+    }
 }
 ```
 For privacy, environment variables (shown above) can be used. To set these in PowerShell use:
