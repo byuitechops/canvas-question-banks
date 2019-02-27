@@ -46,7 +46,7 @@ For privacy, environment variables (shown above) can be used. To set these in Po
 $env:USERNAMENODE="_your_admin_username_"
 $env:PASSWORD="_your_password_"
 ```
-*subdomain* is defaulted to 'byui.instructure.com' and launchOptions can be overwritten for project needs.
+*subdomain* is defaulted to 'byui.instructure.com' and *launchOptions* values can be overwritten for project needs but are defaulted to the object shown above.
 - **Course Number** <_String_>: The course code for the desired banks: 
 ```javascript
 const course = '46246';
