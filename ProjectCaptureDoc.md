@@ -123,9 +123,9 @@ No flags, command line input, or UI exist.
 
 ### Timeline
 
-### Best Mode of Contact
-Slack: Seth Bolander
-Email: <mailto:bol15015@byui.edu>
+### Best Modes of Contact
+- Slack: Seth Bolander
+- Email: <mailto:bol15015@byui.edu>
 
 ### Next Meeting
 
