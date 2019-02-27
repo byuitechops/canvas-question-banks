@@ -5,7 +5,16 @@ async function main() {
     inputs = {
         userName: process.env.USERNAMENODE,
         passWord: process.env.PASSWORD,
-        url: 'byui.beta.instructure.com'
+        subdomain: 'byui.beta.instructure.com',
+        launchOptions: {
+            defaultViewport: {
+                width: 1900,
+                height: 1080
+            },
+            args: ['--start-maximized'],
+            headless: true,
+            // devtools: true
+        }
     };
 
     var QuestionBanksKeys = await QuestionBankTools(inputs); // login with puppeteer

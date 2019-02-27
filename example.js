@@ -1,10 +1,21 @@
 const QuestionBankTools = require('./main');
 const course = '46246';
 const inputs = {
+  // your cct or admin canvas login information
   userName: process.env.USERNAMENODE,
   passWord: process.env.PASSWORD,
   // URL may be byui.instructure.com, byui.beta.instructure.com, or byui.test.instructure.com
-  url: 'byui.instructure.com'
+  subdomain: 'byui.instructure.com',
+  // Puppeteer Launch Options
+  launchOptions: {
+    defaultViewport: {
+      width: 1900,
+      height: 1080
+    },
+    args: ['--start-maximized'],
+    headless: true,
+    // devtools: true
+  }
 };
 
 (async function main() {
