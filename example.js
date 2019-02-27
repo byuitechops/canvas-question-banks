@@ -16,6 +16,7 @@ const inputs = {
     headless: true,
     // devtools: true
   }
+
 };
 
 (async function main() {
