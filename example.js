@@ -1,27 +1,33 @@
-const QB = require('./main')
-const QuestionBanks = QB({
-  canvas_session:"<INSERT canvas_session COOKIE HERE>",
-  _csrf_token:"<INSERT _csrf_token COOKIE HERE>"
-})
+const QuestionBankTools = require('./main');
+const course = '46246';
+const inputs = {
+  userName: process.env.USERNAMENODE,
+  passWord: process.env.PASSWORD
+};
 
-;(async () => {
-  /* Initiates the QuestionBanks Class with the course id */
-  const qbs = new QuestionBanks(11310)
+(async function main() {
+  /* login with puppeteer and returns QuestionBanks class definition */
+  var QuestionBanksKeys = await QuestionBankTools(inputs);
   /* Retrieves the list of QuestionBank objects that are in the course*/
-  const questionbanks = await qbs.getAll()
-
-  /* Creating a new bank */
-  var bank = await qbs.create("I'm a new question bank!")
-  console.log("Created a bank",bank)
+  const qbs = new QuestionBanksKeys.QuestionBanks(course);
+  /* Get Question Banks from puppeteer */
+  await qbs.getAll();
+  /* Get all questions from every Question Bank */
+  for (let bank of qbs.questionBanks) {
+    await bank.getQuestions(); // get questions for every Question Bank
+  }
 
   /*
    * Adding a question to the question bank,
    * which should just be the normal object used to create a question
    * https://canvas.instructure.com/doc/api/quiz_questions.html#method.quizzes/quiz_questions.create
    */
+  var bank = qbs.questionBanks.find(bank => {
+    return bank.id === 497767; // an example question bank in a SandBox course
+  });
   var newQuestion = await bank.createQuestion({
-    "question_name": letters(Math.random()*100000),
-    "assessment_question_id": "",
+    "question_name": letters(Math.random() * 100000),
+    "assessment_question_id": "", // must be empty as Canvas will assign this
     "question_type": "file_upload_question",
     "points_possible": "1",
     "correct_comments_html": "",
@@ -32,14 +38,20 @@ const QuestionBanks = QB({
     "position": "0",
     "text_after_answers": "",
     "matching_answer_incorrect_matches": ""
-  })
-  console.log("Created a question",newQuestion)
-
-  /* Getting the list of questions in the bank (should just be the one question that we created) */
-  var questions = await bank.getQuestions()
-  console.log("List of questions in the bank",questions)
+  });
+  console.log("Created a question", newQuestion);
 
   /* Remove the question that we just created */
-  await bank.deleteQuestion(newQuestion.id)
-  console.log("We just deleted the question, the bank should be empty",bank)
-})().catch(console.error)
+  await bank.deleteQuestion(newQuestion.id);
+  console.log("We just deleted the question, the bank should be empty", bank);
+
+  /* 
+   * Kill the page for the current course
+   * NOTE: This should be included if you intend to login once and run multiple courses,
+   *       otherwise it is not necessary to kill a page for a single course being run
+   */
+  await qbs.closePage();
+
+  /* Kill the current browser. You must ALWAYS kill the current browser after retrieving data */
+  await QuestionBankTools.logout();
+})();

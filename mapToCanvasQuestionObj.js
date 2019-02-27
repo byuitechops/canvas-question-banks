@@ -120,21 +120,21 @@ var aKeys = [{
 }];
 
 
-/*********************************************************************************
- MAPPER(objList, objKeys, scopedData):
-    This function will map an array of questions or an array of answers to create
-    an array of canvas question objects that include the correct keys from 
-    puppeteer's return.
- objList:
-    The array to map. Either an array of questions from a single bank or an array
-    of answers from a single question.
- objKeys:
-    The list of keys to find and attach to the REDUCE accumulator. (qKeys, aKeys)
- scopedData:
-    Answer objects require some 'keys to find' that are on the original question
-    object. This variable gives us access to those keys.
- RETURNS: An array of canvas question objects.
- *********************************************************************************/
+/*
+ * MAPPER(objList, objKeys, scopedData):
+ *    This function will map an array of questions or an array of answers to create
+ *    an array of canvas question objects that include the correct keys from 
+ *    puppeteer's return.
+ * objList:
+ *    The array to map. Either an array of questions from a single bank or an array
+ *    of answers from a single question.
+ * objKeys:
+ *    The list of keys to find and attach to the REDUCE accumulator. (qKeys, aKeys)
+ * scopedData:
+ *    Answer objects require some 'keys to find' that are on the original question
+ *    object. This variable gives us access to those keys.
+ * RETURNS: An array of canvas question objects.
+ */
 function mapper(objList, objKeys, scopedData) {
     var listOut = objList.map(obj => {
         var objOut = objKeys.reduce((accum, objKey) => {
