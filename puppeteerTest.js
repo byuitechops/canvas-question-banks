@@ -5,7 +5,8 @@ const courseId = '80';
 async function main() {
     inputs = {
         userName: process.env.USERNAMENODE,
-        passWord: process.env.PASSWORD
+        passWord: process.env.PASSWORD,
+        url: 'byui.instructure.com'
     }
 
     try {
@@ -19,18 +20,6 @@ async function main() {
         console.dir(qs, {
             depth: null
         });
-
-        // console.log(questionIds);
-        // console.log(questionIds.length);
-        // var courseId = "80";
-        // var response = await pupLogin.httpGet(`https://byui.instructure.com/courses/${courseId}/question_banks/`);
-        // console.log(JSON.parse(response));
-
-        // var courseId = "80";
-        // var bankId = "80338";
-        // var response2 = await pupLogin.httpGet(`https://byui.instructure.com/courses/${courseId}/question_banks/${bankId}/questions`);
-        // console.dir(JSON.parse(response2), {depth:null});
-
     } catch (error) {
         console.log("error");
         console.log(error);
