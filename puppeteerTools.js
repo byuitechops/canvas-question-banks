@@ -1,17 +1,20 @@
 var browser = require('puppeteer-canvas-login');
-var mapToCanvasQuestion = require('./mapToCanvasQuestionObj.js')
+var mapToCanvasQuestion = require('./mapToCanvasQuestionObj.js');
 var isLoggedIn = false;
+var subdomain = 'byui.instructure.com';
 
 // login with puppeteer
 async function login(input) {
     await browser.login(input);
     isLoggedIn = true;
+    subdomain = input.subdomain;
+    var page = await browser.newPage;
 }
 
 // create a new page instance, generally one page per course
 async function newPage() {
     var page = await browser.newPage();
-    await page.goto('https://byui.instructure.com/');
+    await page.goto(`https://${subdomain}/`);
     return page;
 }
 
@@ -77,7 +80,7 @@ async function httpPost(page, url, data) {
 async function getQuestionBanks(page, courseId) {
     // make the call to get the banks
     try {
-        var questionBanks = await httpGet(page, `https://byui.instructure.com/courses/${courseId}/question_banks/`);
+        var questionBanks = await httpGet(page, `https://${subdomain}/courses/${courseId}/question_banks/`);
 
         questionBanks = questionBanks.map(bank => {
             return {
@@ -103,7 +106,7 @@ async function getQuestions(page, courseId, bankId) {
         var questionsAPI;
         do {
             pageCount += 1;
-            questionsAPI = await httpGet(page, `https://byui.instructure.com/courses/${courseId}/question_banks/${bankId}/questions/?page=${pageCount}`);
+            questionsAPI = await httpGet(page, `https://${subdomain}/courses/${courseId}/question_banks/${bankId}/questions/?page=${pageCount}`);
             questions = questions.concat(questionsAPI.questions);
         } while (pageCount !== questionsAPI.pages)
 

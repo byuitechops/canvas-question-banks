@@ -4,8 +4,18 @@ async function main() {
     const course = '46246';
     inputs = {
         userName: process.env.USERNAMENODE,
-        passWord: process.env.PASSWORD
-    }
+        passWord: process.env.PASSWORD,
+        subdomain: 'byui.beta.instructure.com',
+        launchOptions: {
+            defaultViewport: {
+                width: 1900,
+                height: 1080
+            },
+            args: ['--start-maximized'],
+            headless: true,
+            // devtools: true
+        }
+    };
 
     var QuestionBanksKeys = await QuestionBankTools(inputs); // login with puppeteer
     const qbs = new QuestionBanksKeys.QuestionBanks(course); // create a new QuestionBanks for the course

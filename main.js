@@ -1,6 +1,7 @@
 var got = require('got');
 var encode = require('form-urlencoded');
 var getData = require('./puppeteerTools.js');
+var domain = 'byui.instructure.com';
 
 // calls the puppeteer browser.close(). Kills all open pages and ends puppeteer session
 async function logout() {
@@ -54,7 +55,7 @@ class QuestionBanks {
 
   // other available methods for QuestionBanks class
   async create(title) {
-    var res = await send(`https://byui.instructure.com/courses/${this.course}/question_banks`, "POST", {
+    var res = await send(`https://${domain}/courses/${this.course}/question_banks`, "POST", {
       assessment_question_bank: {
         title: title
       }
@@ -75,7 +76,7 @@ class QuestionBanks {
     }
     this.questionBanks.splice(index, 1)
 
-    var res = await send(`https://byui.instructure.com/courses/${this.course}/question_banks/${id}`, "POST", {
+    var res = await send(`https://${domain}/courses/${this.course}/question_banks/${id}`, "POST", {
       _method: "DELETE"
     })
     if (res.statusCode != 200) {
@@ -98,7 +99,7 @@ class QuestionBank {
     Object.assign(this, data)
   }
   async update(title) {
-    var res = await send(`https://byui.instructure.com/courses/${this._course}/question_banks/${this._id}`, "POST", {
+    var res = await send(`https://${domain}/courses/${this._course}/question_banks/${this._id}`, "POST", {
       _method: "PUT",
       assessment_question_bank: {
         title: title
@@ -128,7 +129,7 @@ class QuestionBank {
   }
 
   async createQuestion(data) {
-    var res = await send(`https://byui.instructure.com/courses/${this._course}/question_banks/${this._id}/assessment_questions`, "POST", {
+    var res = await send(`https://${domain}/courses/${this._course}/question_banks/${this._id}/questions`, "POST", {
       question: data,
       assessment_question: {
         assessment_question_bank_id: this._id
@@ -153,7 +154,7 @@ class QuestionBank {
     }
     this._questions.splice(index, 1)
 
-    var res = await send(`https://byui.instructure.com/courses/${this._course}/question_banks/${this._id}/assessment_questions/${id}`, "POST", {
+    var res = await send(`https://${domain}/courses/${this._course}/question_banks/${this._id}/questions/${id}`, "POST", {
       _method: "DELETE"
     })
     if (res.statusCode != 200) {
@@ -176,7 +177,7 @@ class Question {
     Object.assign(this, data)
   }
   async update(data) {
-    var res = await send(`https://byui.instructure.com/courses/${this._course}/question_banks/${this._bank}/assessment_questions/${this._id}`, "POST", {
+    var res = await send(`https://${domain}/courses/${this._course}/question_banks/${this._bank}/assessment_questions/${this._id}`, "POST", {
       question: data,
       assessment_question: {
         assessment_question_bank_id: this._bank
@@ -197,6 +198,13 @@ class Question {
 module.exports = async function (inputs) {
   if (!inputs.userName || !inputs.passWord) {
     throw new Error("Missing login credentials")
+  }
+  // Set domain to byui.instructure or byui.beta.instructure
+  if (inputs.url !== undefined) {
+    domain = inputs.url;
+  } else {
+    domain = 'byui.instructure.com';
+    inputs.url = 'byui.instructure.com';
   }
 
   // PUPPETEER LOGIN
