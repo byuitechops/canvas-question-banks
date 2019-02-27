@@ -1,6 +1,6 @@
-# Key Components Doc for (Enter Title of Project)
+# Key Components Doc for Canvas Question Banks
 
-Author Name: 
+Author Name: Seth Bolander
 
 ## 1. Basic Backlog (You may include a WBS image if you choose)
 
@@ -30,23 +30,20 @@ Example:
 ## 2. Library List
 Bullet list of all libraries planning to use
 
-Example:
-
-- D3-DSV library 
-- Promises
-- C# Classes
-- FS Library
+- **got**
+- **form-urlencoded**
+- **puppeteer-canvas-login**
 -----
 
 ## 3. Prototype List
 Bullet list of all skills that are not yet developed and a corresponding description of a prototype. The prototype is used to help develop that skill.
 
-Example:
-
-- D3-DSV library
-    - Use the D3-DSV library to convert a simple JSON with keys: "Name", "Favorite Smash Bros Character", "Favorite Color", "Favorite Coding Language" into a CSV file.
-- Promises
-    - Create a program that reads in a file and returns a promise when the file read has completed.
+- **async**
+    - Use async/await to get data from requests.
+- **puppeteer**
+    - Used to login and fetch data without making API calls to Canvas.
+- **http.get and http.post requests**
+    - Used to fetch data from a given course's question banks' URL.
 
 -----
 
