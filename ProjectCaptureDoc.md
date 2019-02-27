@@ -2,12 +2,12 @@
 #### *Author: Seth Bolander*
 
 ## Background
-Paragraph describing context of the needs of the stakeholder. It should focus on the **why** of the project.
+Canvas API does not include a way to reach Question Banks in courses; therefore, this tool was built to retrieve data from and send data to Question Banks without using API calls while still having access.
 
 -----
 
 ## Objectives
-- Return every question in all question banks for a desired course
+- Return every question in all question banks for a desired course, mimicking Canvas' format
 - Function quickly and effectively for use in other tools that need questions/banks
 - Have access to edit/delete/create questions within question banks
 
@@ -46,6 +46,7 @@ For privacy, environment variables (shown above) can be used. To set these in Po
 $env:USERNAMENODE="_your_admin_username_"
 $env:PASSWORD="_your_password_"
 ```
+*subdomain* is defaulted to 'byui.instructure.com' and launchOptions can be overwritten for project needs.
 - **Course Number** <_String_>: The course code for the desired banks: 
 ```javascript
 const course = '46246';
