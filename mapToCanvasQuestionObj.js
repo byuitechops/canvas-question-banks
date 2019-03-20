@@ -76,6 +76,9 @@ var aKeys = [{
     keyToFind: "text",
     getValue: (obj, scopedData) => obj.text
 }, {
+    keyToFind: "html",
+    getValue: (obj, scopedData) => obj.html
+}, {
     keyToFind: "weight",
     getValue: (obj, scopedData) => obj.weight
 }, {
